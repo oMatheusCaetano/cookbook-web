@@ -1,0 +1,12 @@
+services:
+  cookbook-web:
+    build: .
+    image: cookbook-web
+    container_name: cookbook-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    environment:
+      - TZ=America/Sao_Paulo
+    entrypoint: ./entrypoint.sh

@@ -24,7 +24,6 @@ export const Route = createFileRoute('/_authenticated-only')({
       const response = await getUser(userData.user.id)
 
       if (response.isError) {
-        //TODO: Handle error
         throw redirect({ to: '/entrar', search: { redirectTo: props.location.href } })
       }
 

@@ -1,5 +1,7 @@
-import { getPaginated, post, put } from "./gateway/api"
+import { del, get, getPaginated, post, put } from "./gateway/api"
 import type { User } from "./user"
+
+export type RecipeRelation = ('user' | 'ingredients' | 'steps')
 
 export type Recipe = {
   id?: number
@@ -27,10 +29,18 @@ export type RecipeStep = {
   description: string
 }
 
-export async function paginateRecipe(props: { page?: number; per_page?: number, with?: ('user' | 'ingredients' | 'steps')[] }) {
+export async function paginateRecipe(props: { page?: number; per_page?: number, with?: RecipeRelation[] }) {
   return getPaginated<Recipe>('recipe', props);
+}
+
+export async function getRecipe(id: number, props?: { with?: RecipeRelation[] }) {
+    return get<Recipe>(`recipe/${id}`, props);
 }
 
 export async function saveRecipe(data: Partial<Recipe>) {
   return !!data.id ? put<Recipe>(`recipe/${data.id}`, data) : post<Recipe>('recipe', data)
+}
+
+export async function deleteRecipe(id: number) {
+  return del<void>(`recipe/${id}`)
 }

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedOnlyRouteRouteImport } from './routes/_authenticated-only/route'
 import { Route as AuthenticatedOnlyIndexRouteImport } from './routes/_authenticated-only/index'
 import { Route as Public_onlyEntrarIndexRouteImport } from './routes/_public_only/entrar/index'
+import { Route as AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRouteImport } from './routes/_authenticated-only/receita/cadastro/{-$id}/index'
 
 const AuthenticatedOnlyRouteRoute = AuthenticatedOnlyRouteRouteImport.update({
   id: '/_authenticated-only',
@@ -27,31 +28,41 @@ const Public_onlyEntrarIndexRoute = Public_onlyEntrarIndexRouteImport.update({
   path: '/entrar/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute =
+  AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRouteImport.update({
+    id: '/receita/cadastro/{-$id}/',
+    path: '/receita/cadastro/{-$id}/',
+    getParentRoute: () => AuthenticatedOnlyRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
+  '/receita/cadastro/{-$id}': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
+  '/receita/cadastro/{-$id}': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated-only': typeof AuthenticatedOnlyRouteRouteWithChildren
   '/_authenticated-only/': typeof AuthenticatedOnlyIndexRoute
   '/_public_only/entrar/': typeof Public_onlyEntrarIndexRoute
+  '/_authenticated-only/receita/cadastro/{-$id}/': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/entrar'
+  fullPaths: '/' | '/entrar' | '/receita/cadastro/{-$id}'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/entrar'
+  to: '/' | '/entrar' | '/receita/cadastro/{-$id}'
   id:
     | '__root__'
     | '/_authenticated-only'
     | '/_authenticated-only/'
     | '/_public_only/entrar/'
+    | '/_authenticated-only/receita/cadastro/{-$id}/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -82,16 +93,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public_onlyEntrarIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated-only/receita/cadastro/{-$id}/': {
+      id: '/_authenticated-only/receita/cadastro/{-$id}/'
+      path: '/receita/cadastro/{-$id}'
+      fullPath: '/receita/cadastro/{-$id}'
+      preLoaderRoute: typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRouteImport
+      parentRoute: typeof AuthenticatedOnlyRouteRoute
+    }
   }
 }
 
 interface AuthenticatedOnlyRouteRouteChildren {
   AuthenticatedOnlyIndexRoute: typeof AuthenticatedOnlyIndexRoute
+  AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute: typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
 
 const AuthenticatedOnlyRouteRouteChildren: AuthenticatedOnlyRouteRouteChildren =
   {
     AuthenticatedOnlyIndexRoute: AuthenticatedOnlyIndexRoute,
+    AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute:
+      AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute,
   }
 
 const AuthenticatedOnlyRouteRouteWithChildren =

@@ -41,7 +41,7 @@ export async function put<T>(endpoint: string, payload: any): Promise<types.Requ
   return makeRequest<T>(api.put(endpoint, payload))
 }
 
-export async function del<T>(endpoint: string, queryString: Record<string, any>): Promise<types.RequestError | types.RequestResponse<T>> {
+export async function del<T>(endpoint: string, queryString?: Record<string, any>): Promise<types.RequestError | types.RequestResponse<T>> {
   const query = Http.toQueryString(queryString)
   const url = query ? `${endpoint}?${query}` : endpoint
   return makeRequest<T>(api.delete(url))

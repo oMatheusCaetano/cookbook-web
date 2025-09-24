@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type UseFormProps<T> = {
-  initialData?: Partial<T>;
-  onSubmit?: (data: T, event: React.FormEvent<HTMLFormElement>) => any;
+  initialData?: Partial<T>
+  onSubmit?: (data: T, event: React.FormEvent<HTMLFormElement>) => any
 }
 
 export type UseFormReturn<T> = {
@@ -16,7 +16,7 @@ export type UseFormReturn<T> = {
   setError: React.Dispatch<React.SetStateAction<string | null | undefined>>
   errors: { [key: string]: string }
   setErrors: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>
-  setErrorsFromApi: (response: any) => boolean,
+  setErrorsFromApi: (response: any) => false | { message: string | undefined },
   clearErrors: () => void,
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>,
   handleChange: (value: string | number | boolean, name: keyof T) => void,
@@ -36,6 +36,10 @@ export function useForm<T = { [key: string]: any }>(props?: UseFormProps<T>) {
   const [form, setForm] = useState<Partial<T>>((props?.initialData ?? {}));
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    setForm(props?.initialData ?? {})
+  }, [props?.initialData])
 
   const isEmpty = Object.values(form).every((x: any) => {
     if ([null, undefined].includes(x)) return true;
@@ -135,10 +139,11 @@ export function useForm<T = { [key: string]: any }>(props?: UseFormProps<T>) {
         newErrors[key] = errs[key][0];
       });
       setErrors(newErrors);
+      return { message: undefined }
     } else {
       setError(response.message);
+      return { message: response.message };
     }
-    return true;
   }
 
   return {

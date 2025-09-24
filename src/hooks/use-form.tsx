@@ -20,7 +20,7 @@ export type UseFormReturn<T> = {
   clearErrors: () => void,
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>,
   handleChange: (value: string | number | boolean, name: keyof T) => void,
-  register: (name: keyof T, options?: {
+  register: (name: keyof T | `${string}.${number}.${string}`, options?: {
     except?: ("value" | "setValue" | "error")[]
     getValue?: () => any
     setValue?: (value: any) => void
@@ -51,33 +51,60 @@ export function useForm<T = { [key: string]: any }>(props?: UseFormProps<T>) {
   }
 
   function register(
-    name: keyof typeof form,
+    name: keyof typeof form | `${string}.${number}.${string}`,
     options?: {
       except?: ('value' | 'setValue' | 'error')[],
       getValue?: () => any,
       setValue?: (value: any) => void
     }
   ) {
-    let item = {};
+    function getNestedValue(obj: any, path: string) {
+      return path.split('.').reduce((acc, part) => {
+        if (acc === undefined || acc === null) return undefined;
+        return acc[part];
+      }, obj);
+    }
 
-    if (! options?.except?.includes('value')) {
-      item = {
-        value: options?.getValue ? options.getValue() : (form[name] as any ?? ''),
+    function setNestedValue(obj: any, path: string, value: any) {
+      const parts = path.split('.');
+      const newObj = Array.isArray(obj) ? [...obj] : { ...obj };
+      let current = newObj;
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (i === parts.length - 1) {
+          current[part] = value;
+        } else {
+          if (current[part] === undefined || current[part] === null) {
+            const nextPart = parts[i + 1];
+            current[part] = /^\d+$/.test(nextPart) ? [] : {};
+          }
+          current[part] = Array.isArray(current[part]) ? [...current[part]] : { ...current[part] };
+          current = current[part];
+        }
+      }
+      return newObj;
+    }
+
+    let item: any = {};
+
+    if (!options?.except?.includes('value')) {
+      const value = options?.getValue ? options.getValue() : (typeof name === 'string' && name.includes('.') ? getNestedValue(form, name) : form[name as keyof typeof form]) ?? '';
+      item.value = value;
+    }
+
+    if (!options?.except?.includes('setValue')) {
+      item.setValue = options?.setValue ? options.setValue : (value: any) => {
+        if (typeof name === 'string' && name.includes('.')) {
+          setForm(prevForm => setNestedValue(prevForm, name, value));
+        } else {
+          handleChange(value, name as keyof typeof form);
+        }
       }
     }
 
-    if (! options?.except?.includes('setValue')) {
-      item = {
-        ...item,
-        setValue: options?.setValue ? options.setValue : (value: string) => handleChange(value, name)
-      }
-    }
-
-    if (! options?.except?.includes('error')) {
-      item = {
-        ...item,
-        error: errors[name as string] ?? ''
-      }
+    if (!options?.except?.includes('error')) {
+      const errorValue = typeof name === 'string' && name.includes('.') ? errors[name] ?? '' : errors[name as string] ?? '';
+      item.error = errorValue;
     }
 
     return item;

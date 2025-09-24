@@ -1,4 +1,4 @@
-import { AlertBanner, Button, Input, Logo, PageContainer } from '@/components'
+import { AlertBanner, Button, Input, Logo } from '@/components'
 import { login, type LoginData } from '@/data/auth'
 import { useForm } from '@/hooks'
 import { Storage } from '@/lib'
@@ -27,7 +27,7 @@ function RouteComponent() {
   })
 
   return (
-    <PageContainer className='flex items-center justify-center'>
+    <div className='flex items-center justify-center min-h-dvh'>
       <main className='w-full max-w-sm px-5'>
         <Logo className='h-11' />
 
@@ -53,6 +53,6 @@ function RouteComponent() {
           </Button>
         </form>
       </main>
-    </PageContainer>
+    </div>
   )
 }

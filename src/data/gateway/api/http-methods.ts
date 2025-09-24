@@ -8,6 +8,31 @@ export async function get<T>(endpoint: string, queryString?: Record<string, any>
   return makeRequest<T>(api.get(url))
 }
 
+export async function getPaginated<T>(endpoint: string, queryString?: Record<string, any>): Promise<types.RequestError | types.PaginatedResponse<T>> {
+  const query = Http.toQueryString(queryString)
+  const url = query ? `${endpoint}?${query}` : endpoint
+  try {
+    const { data } = await api.get(url)
+    return {
+      isError: false,
+      data: data.data as T[],
+      current_page: data.current_page,
+      from: data.from,
+      last_page: data.last_page,
+      per_page: data.per_page,
+      total: data.total
+    }
+  } catch (err: any) {
+    console.error('ERRO NA REQUISIÇÃO PARA A API:', err)
+
+    return {
+      data: err?.response?.data,
+      message: err?.response?.data?.message || err?.response?.message || err?.message || 'Falha ao processar requisição',
+      isError: true
+    }
+  }
+}
+
 export async function post<T>(endpoint: string, payload: any): Promise<types.RequestError | types.RequestResponse<T>> {
   return makeRequest<T>(api.post(endpoint, payload))
 }

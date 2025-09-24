@@ -1,15 +1,19 @@
-import { Avatar, PageContainer } from '@/components'
+import { Avatar, Button, PageContainer } from '@/components'
 import { paginateRecipe, type Recipe } from '@/data/recipe'
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 import { BsPeople } from 'react-icons/bs'
-import { LuClock } from 'react-icons/lu'
+import { LuClock, LuPencil, LuPlus } from 'react-icons/lu'
+import { Link } from '@tanstack/react-router'
+import { useApp } from '@/hooks'
 
 export const Route = createFileRoute('/_authenticated-only/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const app = useApp()
+
   const [recipes, setRecipes] = useState([] as Recipe[])
   const [meta, setMeta] = useState({} as any)
   const [loading, setLoading] = useState(false)
@@ -49,11 +53,30 @@ function RouteComponent() {
   }, [])
 
   return (
-    <PageContainer title='Receitas' sub={meta.total ? `Total de ${meta.total} receitas encontradas` : undefined}>
+    <PageContainer
+      title='Receitas'
+      sub={meta.total ? `Total de ${meta.total} receitas encontradas` : undefined}
+      actions={(
+        <Link to='/receita/cadastro/{-$id}'>
+          <Button variant='primary' className='flex items-center gap-2'>
+            <LuPlus /> Receita
+          </Button>
+        </Link>
+      )}
+    >
       <ul>
         {recipes.map((recipe, i) => (
           <li key={i} className='p-4 border border-border rounded mb-5'>
-            <h2 className='font-bold text-lg'>{recipe.name}</h2>
+            <div className='flex justify-between items-center mb-2'>
+              <h2 className='font-bold text-lg'>{recipe.name}</h2>
+              {recipe.user?.id === app.user?.id && (
+                <Link to='/receita/cadastro/{-$id}' params={{ id: String(recipe.id) }}>
+                  <Button variant='text'>
+                    <LuPencil />
+                  </Button>
+                </Link>
+              )}
+            </div>
             <p className='text-sm text-foreground/70'>{recipe.description}</p>
             <div className='flex gap-4 mt-4'>
               <div className='flex items-center gap-2'>

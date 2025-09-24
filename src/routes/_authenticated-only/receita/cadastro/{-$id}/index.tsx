@@ -1,25 +1,45 @@
 import { Button, Form, Input, PageContainer, Textarea, Title } from '@/components'
-import { saveRecipe, type Recipe } from '@/data/recipe'
+import { getRecipe, saveRecipe, type Recipe } from '@/data/recipe'
 import { useForm } from '@/hooks'
-import { createFileRoute } from '@tanstack/react-router'
-import { LuPlus } from 'react-icons/lu'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
+import { LuChevronLeft, LuPlus } from 'react-icons/lu'
 import { toast } from 'sonner'
 
-export const Route = createFileRoute('/_authenticated-only/receita/cadastro/')({
+export const Route = createFileRoute('/_authenticated-only/receita/cadastro/{-$id}/')({
   component: RouteComponent,
+  loader: async (params) => {
+    if (!params.params.id) return null
+
+    const response = await getRecipe(Number(params.params.id), { with: ['user', 'steps', 'ingredients'] })
+
+    if (response.isError) {
+      toast.error(response.message || 'Erro ao carregar receita')
+      throw redirect({ to: '/' })
+    }
+
+    return response.data
+  }
 })
 
 function RouteComponent() {
+  const navigate = useNavigate()
+
   const { register, form, setForm, onSubmit, setErrorsFromApi, isLoading } = useForm<Recipe>({
-    initialData: {
+    initialData: Route.useLoaderData() ?? {
       ingredients: [{ description: '' }],
       steps: [{ description: '' }],
     },
     onSubmit: async (data) =>{
       const response = await saveRecipe(data)
-      if (response.isError) {
-        toast.error(response.message);
+      const error = setErrorsFromApi(response)
+
+      if (error) {
+        error.message && toast.error(error.message);
+        return
       }
+
+      toast.success('Receita salva com sucesso!')
+      navigate({ to: '/' })
     },
   })
 
@@ -32,7 +52,17 @@ function RouteComponent() {
   }
 
   return (
-    <PageContainer title='Cadastro de Receita' sub='Crie ou edite os dados da sua receita'>
+    <PageContainer
+      title='Cadastro de Receita'
+      sub='Crie ou edite os dados da sua receita'
+      actions={(
+        <Link to='/'>
+          <Button className='flex items-center gap-2'>
+            <LuChevronLeft />
+          </Button>
+        </Link>
+      )}
+    >
       <Form onSubmit={onSubmit}>
         <Input
           label='Nome da Receita'
@@ -73,7 +103,7 @@ function RouteComponent() {
               ))}
             </ul>
 
-            <Button variant='text' className='mx-auto' type='button' onClick={addIngredient}>
+            <Button className='mx-auto' variant='text' type='button' onClick={addIngredient}>
               <LuPlus /> Ingrediente
             </Button>
           </section>
@@ -92,16 +122,20 @@ function RouteComponent() {
               ))}
             </ul>
 
-            <Button variant='text' className='mx-auto' type='button' onClick={addStep}>
+            <Button className='mx-auto' variant='text' type='button' onClick={addStep}>
               <LuPlus /> Passo
             </Button>
           </section>
         </div>
 
-        <footer className='mt-10 flex items-center flex-row-reverse border-t border-border pt-5'>
+        <footer className='mt-10 flex items-center flex-row-reverse border-t border-border pt-5 gap-4'>
           <Button type='submit' variant='primary' loading={isLoading}>
             Salvar Receita
           </Button>
+
+          {!!form.id && <Button type='button'  loading={isLoading}>
+            Excluir
+          </Button>}
         </footer>
       </Form>
     </PageContainer>

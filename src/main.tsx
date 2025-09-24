@@ -9,7 +9,7 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { useApp } from './hooks/use-app.tsx'
 import { AppProvider } from './contexts/app-context.tsx'
-import { Toaster } from './components'
+import { Toaster } from './components/toast/toaster.tsx'
 
 // Create a new router instance
 const router = createRouter({
@@ -17,7 +17,7 @@ const router = createRouter({
   context: {
     app: undefined!,
   },
-  defaultPreload: 'intent',
+  defaultPreload: false,
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,

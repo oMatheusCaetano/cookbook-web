@@ -4,7 +4,7 @@ services:
     image: cookbook-web
     container_name: cookbook-web
     ports:
-      - "3000:3000"
+      - 7775:7775
     volumes:
       - .:/app
     environment:

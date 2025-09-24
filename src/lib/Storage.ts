@@ -25,9 +25,19 @@ export const Storage = {
     return value;
   },
 
-  getApiToken: () => 'TOKEN',
+
+  getAuthData: () => {
+    return Storage.get(Storage.AUTH_DATA_TOKEN) as { token: string; user: { id: number } } | null;
+  },
 
   setAuthData: (data: LoginResponse) => {
-    
-  }
+    Storage.set(Storage.AUTH_DATA_TOKEN, {
+      token: data.token,
+      user: { id: data.user.id },
+    });
+  },
+
+  getApiToken: () => Storage.getAuthData()?.token || null,
+
+  getUserId: () => Storage.getAuthData()?.user.id || null,
 }

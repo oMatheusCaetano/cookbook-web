@@ -1,4 +1,4 @@
-import { AlertBanner, Button, Input, PageContainer } from '@/components'
+import { AlertBanner, Button, Input, Logo, PageContainer } from '@/components'
 import { login, type LoginData } from '@/data/auth'
 import { useForm } from '@/hooks'
 import { Storage } from '@/lib'
@@ -17,13 +17,10 @@ export const Route = createFileRoute('/_public_only/entrar/')({
 function RouteComponent() {
   const { redirectTo } = Route.useSearch()
   const navigate = useNavigate()
-  const { register, onSubmit, isEmpty, isLoading, error, setError } = useForm<LoginData>({
+  const { register, onSubmit, isLoading, error, setErrorsFromApi } = useForm<LoginData>({
     onSubmit: async (data) =>{
       const response = await login(data)
-      if (response.isError) {
-        setError(response.message)
-        return
-      }
+      if (setErrorsFromApi(response)) return
       Storage.setAuthData(response.data)
       navigate({ to: redirectTo as any, replace: true })
     },
@@ -32,7 +29,7 @@ function RouteComponent() {
   return (
     <PageContainer className='flex items-center justify-center'>
       <main className='w-full max-w-sm px-5'>
-        <img src='/logo192.png' alt='Logo' className='h-14 mx-auto' />
+        <Logo className='h-11' />
 
         <header className='text-center space-y-2 mb-10 mt-7 '>
           <h2 className='text-xl font-semibold'>Bem-vindo de volta!</h2>
@@ -51,7 +48,6 @@ function RouteComponent() {
             variant='primary'
             className='w-full mt-7'
             loading={isLoading}
-            disabled={isEmpty}
           >
             Entrar
           </Button>

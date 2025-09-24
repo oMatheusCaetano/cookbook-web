@@ -16,6 +16,7 @@ export type UseFormReturn<T> = {
   setError: React.Dispatch<React.SetStateAction<string | null | undefined>>
   errors: { [key: string]: string }
   setErrors: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>
+  setErrorsFromApi: (response: any) => boolean,
   clearErrors: () => void,
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>,
   handleChange: (value: string | number | boolean, name: keyof T) => void,
@@ -95,6 +96,24 @@ export function useForm<T = { [key: string]: any }>(props?: UseFormProps<T>) {
     setErrors({});
   }
 
+  function setErrorsFromApi(response: any) {
+    if (!response?.isError) return false;
+    const errs = response?.data?.errors ?? undefined;
+    console.log(errs);
+
+    if (errs) {
+      const newErrors: { [key: string]: string } = {};
+      Object.keys(errs).forEach((key: any) => {
+          console.log(error)
+        newErrors[key] = errs[key][0];
+      });
+      setErrors(newErrors);
+    } else {
+      setError(response.message);
+    }
+    return true;
+  }
+
   return {
     form,
     isEmpty,
@@ -109,6 +128,7 @@ export function useForm<T = { [key: string]: any }>(props?: UseFormProps<T>) {
     handleChange,
     register,
     onSubmit,
+    setErrorsFromApi,
     clearErrors
   } as UseFormReturn<T>
 }

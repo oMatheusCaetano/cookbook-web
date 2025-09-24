@@ -8,6 +8,10 @@ export * from './button/button';
 export * from './container/input-container';
 export * from './container/page-container';
 
+//! Img
+export * from './img/avatar';
+export * from './img/logo';
+
 //! Input
 export * from './input/input';
 

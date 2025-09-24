@@ -9,8 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedOnlyRouteRouteImport } from './routes/_authenticated-only/route'
+import { Route as AuthenticatedOnlyIndexRouteImport } from './routes/_authenticated-only/index'
 import { Route as Public_onlyEntrarIndexRouteImport } from './routes/_public_only/entrar/index'
 
+const AuthenticatedOnlyRouteRoute = AuthenticatedOnlyRouteRouteImport.update({
+  id: '/_authenticated-only',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedOnlyIndexRoute = AuthenticatedOnlyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedOnlyRouteRoute,
+} as any)
 const Public_onlyEntrarIndexRoute = Public_onlyEntrarIndexRouteImport.update({
   id: '/_public_only/entrar/',
   path: '/entrar/',
@@ -18,29 +29,52 @@ const Public_onlyEntrarIndexRoute = Public_onlyEntrarIndexRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authenticated-only': typeof AuthenticatedOnlyRouteRouteWithChildren
+  '/_authenticated-only/': typeof AuthenticatedOnlyIndexRoute
   '/_public_only/entrar/': typeof Public_onlyEntrarIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/entrar'
+  fullPaths: '/' | '/entrar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/entrar'
-  id: '__root__' | '/_public_only/entrar/'
+  to: '/' | '/entrar'
+  id:
+    | '__root__'
+    | '/_authenticated-only'
+    | '/_authenticated-only/'
+    | '/_public_only/entrar/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthenticatedOnlyRouteRoute: typeof AuthenticatedOnlyRouteRouteWithChildren
   Public_onlyEntrarIndexRoute: typeof Public_onlyEntrarIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_authenticated-only': {
+      id: '/_authenticated-only'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedOnlyRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated-only/': {
+      id: '/_authenticated-only/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedOnlyIndexRouteImport
+      parentRoute: typeof AuthenticatedOnlyRouteRoute
+    }
     '/_public_only/entrar/': {
       id: '/_public_only/entrar/'
       path: '/entrar'
@@ -51,7 +85,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedOnlyRouteRouteChildren {
+  AuthenticatedOnlyIndexRoute: typeof AuthenticatedOnlyIndexRoute
+}
+
+const AuthenticatedOnlyRouteRouteChildren: AuthenticatedOnlyRouteRouteChildren =
+  {
+    AuthenticatedOnlyIndexRoute: AuthenticatedOnlyIndexRoute,
+  }
+
+const AuthenticatedOnlyRouteRouteWithChildren =
+  AuthenticatedOnlyRouteRoute._addFileChildren(
+    AuthenticatedOnlyRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
+  AuthenticatedOnlyRouteRoute: AuthenticatedOnlyRouteRouteWithChildren,
   Public_onlyEntrarIndexRoute: Public_onlyEntrarIndexRoute,
 }
 export const routeTree = rootRouteImport

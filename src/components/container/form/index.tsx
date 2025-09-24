@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils"
 
-export type FormProps = React.FormHTMLAttributes<HTMLFormElement> & {
-};
+export type FormProps = React.FormHTMLAttributes<HTMLFormElement>
 
 export function Form({ children, ...props }: FormProps) {
   return (

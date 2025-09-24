@@ -1,4 +1,4 @@
-import { Error } from "@/components/txt/error"
+import { ErrorMsg } from "@/components/txt/error-msg"
 import { Label } from "@/components/txt/label"
 import { tw } from "@matheuscaetano/helprs"
 
@@ -14,7 +14,7 @@ export function InputContainer({ children, ...props }: InputContainerProps) {
     <div {...props} className={tw(props.className)}>
       {!!props.label && <Label>{props.label}</Label>}
       {children}
-      {!!props.error && <Error>{props.error}</Error>}
+      {!!props.error && <ErrorMsg>{props.error}</ErrorMsg>}
     </div>
   )
 }

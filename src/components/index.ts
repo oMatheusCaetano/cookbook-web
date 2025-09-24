@@ -16,5 +16,5 @@ export * from './img/logo';
 export * from './input/input';
 
 //! Txt
-export * from './txt/error';
+export * from './txt/error-msg';
 export * from './txt/label';

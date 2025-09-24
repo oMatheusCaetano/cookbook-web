@@ -7,5 +7,25 @@
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "[javascript]": {
+    "editor.indentSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[typescript]": {
+    "editor.indentSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[typescriptreact]": {
+    "editor.indentSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[javascriptreact]": {
+    "editor.indentSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
 }

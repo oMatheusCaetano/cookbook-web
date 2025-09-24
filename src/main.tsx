@@ -9,6 +9,7 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { useApp } from './hooks/use-app.tsx'
 import { AppProvider } from './contexts/app-context.tsx'
+import { Toaster } from './components'
 
 // Create a new router instance
 const router = createRouter({
@@ -42,6 +43,16 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <AppProvider>
         <App />
+
+        <Toaster
+          richColors
+          toastOptions={{
+            classNames: {
+              success: "!bg-primary !text-primary-foreground !border !border-primary",
+              error: "!bg-red-600 !text-white !border !border-red-600",
+            },
+          }}
+        />
       </AppProvider>
     </StrictMode>
   )

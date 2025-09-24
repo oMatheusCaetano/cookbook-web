@@ -1,9 +1,10 @@
 import { Button, Form, Input, PageContainer, Textarea, Title } from '@/components'
-import { getRecipe, saveRecipe, type Recipe } from '@/data/recipe'
+import { deleteRecipe, getRecipe, saveRecipe, type Recipe } from '@/data/recipe'
 import { useForm } from '@/hooks'
 import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
 import { LuChevronLeft, LuPlus } from 'react-icons/lu'
 import { toast } from 'sonner'
+import Swal from 'sweetalert2'
 
 export const Route = createFileRoute('/_authenticated-only/receita/cadastro/{-$id}/')({
   component: RouteComponent,
@@ -49,6 +50,28 @@ function RouteComponent() {
 
   function addStep() {
     setForm((form) => ({ ...form, steps: [...(form.steps!), { description: '' }] }))
+  }
+
+  async function handleDelete() {
+    const confirm = await Swal.fire({
+      title: "Excluir Receita?",
+      text: "Você não poderá reverter isso!",
+      showCancelButton: true,
+      confirmButtonText: "Excluir",
+      denyButtonText: 'Cancelar'
+    })
+
+    if (!confirm.isConfirmed) return
+
+    const response = await deleteRecipe(form.id!)
+    if (response.isError) {
+      toast.error(response.message || 'Erro ao excluir receita')
+      return
+    }
+
+    toast.success('Receita excluída com sucesso!')
+    navigate({ to: '/' })
+
   }
 
   return (
@@ -133,7 +156,7 @@ function RouteComponent() {
             Salvar Receita
           </Button>
 
-          {!!form.id && <Button type='button'  loading={isLoading}>
+          {!!form.id && <Button type='button'  loading={isLoading} onClick={handleDelete}>
             Excluir
           </Button>}
         </footer>

@@ -18,3 +18,4 @@ export * from './input/input';
 //! Txt
 export * from './txt/error-msg';
 export * from './txt/label';
+export * from './txt/title';

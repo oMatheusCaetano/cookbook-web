@@ -14,7 +14,7 @@ export function Avatar({ className, personName, ...rest }: AvatarProps) {
   }
 
   return (
-    <div className={cn(className, ' h-7 w-7 rounded-full bg-primary border border-border flex items-center justify-center')} {...rest}>
+    <div className={cn('h-7 w-7 rounded-full bg-primary border border-border flex items-center justify-center', className)} {...rest}>
       {!!personName && <span className='text-xs'>
         {getInitials()}
       </span>}

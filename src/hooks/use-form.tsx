@@ -39,7 +39,7 @@ export function useForm<T = { [key: string]: any }>(props?: UseFormProps<T>) {
 
   useEffect(() => {
     setForm(props?.initialData ?? {})
-  }, [props?.initialData])
+  }, [JSON.stringify(props?.initialData)])
 
   const isEmpty = Object.values(form).every((x: any) => {
     if ([null, undefined].includes(x)) return true;

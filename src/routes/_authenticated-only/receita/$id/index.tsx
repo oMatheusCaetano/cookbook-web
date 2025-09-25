@@ -61,8 +61,8 @@ function RouteComponent() {
           <Title>Ingredientes</Title>
 
           <ul className='space-y-4 mt-5'>
-            {recipe.ingredients?.map((ingredient, i) => (
-              <li>
+            {recipe.ingredients?.map((ingredient) => (
+              <li key={ingredient.id}>
                 {ingredient.description}
               </li>
             ))}
@@ -74,7 +74,7 @@ function RouteComponent() {
 
           <ul className='space-y-4 mt-5'>
             {recipe.steps?.map((step, i) => (
-              <li key={i} className='flex gap-3 items-start'>
+              <li key={step.id} className='flex gap-3 items-start'>
                 <span className='mt-1 text-sm font-medium bg-border rounded-full h-5 w-5 flex items-center justify-center'>{i + 1}</span>
                 <div>
                   {step.description}

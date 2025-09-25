@@ -38,7 +38,7 @@ export async function getRecipe(id: number, props?: { with?: RecipeRelation[] })
 }
 
 export async function saveRecipe(data: Partial<Recipe>) {
-  return !!data.id ? put<Recipe>(`recipe/${data.id}`, data) : post<Recipe>('recipe', data)
+  return data.id ? put<Recipe>(`recipe/${data.id}`, data) : post<Recipe>('recipe', data)
 }
 
 export async function deleteRecipe(id: number) {

@@ -1,10 +1,9 @@
 import { Avatar, Button, PageContainer } from '@/components'
 import { paginateRecipe, type Recipe } from '@/data/recipe'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 import { BsPeople } from 'react-icons/bs'
 import { LuClock, LuPencil, LuPlus } from 'react-icons/lu'
-import { Link } from '@tanstack/react-router'
 import { useApp } from '@/hooks'
 
 export const Route = createFileRoute('/_authenticated-only/')({
@@ -65,8 +64,8 @@ function RouteComponent() {
       )}
     >
       <ul>
-        {recipes.map((recipe, i) => (
-          <li key={i} className='p-4 border border-border rounded mb-5'>
+        {recipes.map((recipe) => (
+          <li key={recipe.id} className='p-4 border border-border rounded mb-5'>
               <div className='flex justify-between items-center mb-2'>
                 <Link to='/receita/$id' params={{ id: String(recipe.id) }}>
                   <h2 className='font-bold text-lg hover:underline'>{recipe.name}</h2>

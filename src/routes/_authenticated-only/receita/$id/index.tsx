@@ -8,6 +8,7 @@ import { useApp } from '@/hooks'
 
 export const Route = createFileRoute('/_authenticated-only/receita/$id/')({
   component: RouteComponent,
+  head: () => ({ meta: [{ title: 'Receita | Cookbook' }] }),
   loader: async (params) => {
     const response = await getRecipe(Number(params.params.id), { with: ['user', 'steps', 'ingredients'] })
 
@@ -57,7 +58,7 @@ function RouteComponent() {
       </div>
 
       <div className='grid gap-5 md:grid-cols-12'>
-        <section className='md:col-span-4'>
+        <section className='md:col-span-4 border-l border-border pl-5'>
           <Title>Ingredientes</Title>
 
           <ul className='space-y-4 mt-5'>
@@ -69,7 +70,7 @@ function RouteComponent() {
           </ul>
         </section>
 
-        <section className='md:col-span-8 border-l border-border pl-5'>
+        <section className='md:col-span-8 border-l mt-10 md:mt-0 border-border pl-5'>
           <Title>Passo a Passo</Title>
 
           <ul className='space-y-4 mt-5'>

@@ -2,27 +2,21 @@ import { AlertBanner, Button, Input, Logo } from '@/components'
 import { login, type LoginData } from '@/data/auth'
 import { useForm } from '@/hooks'
 import { Storage } from '@/lib'
-import { z } from 'zod'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_public_only/entrar/')({
   component: RouteComponent,
   head: () => ({ meta: [{ title: 'Entrar | Cookbook' }] }),
-  validateSearch: (search: Record<string, unknown>) => {
-    return z.object({
-      redirectTo: z.string().catch('/'),
-    }).parse(search)}
 })
 
 function RouteComponent() {
-  const { redirectTo } = Route.useSearch()
   const navigate = useNavigate()
   const { register, onSubmit, isLoading, error, setErrorsFromApi } = useForm<LoginData>({
     onSubmit: async (data) =>{
       const response = await login(data)
       if (setErrorsFromApi(response)) return
       Storage.setAuthData(response.data)
-      navigate({ to: redirectTo as any, replace: true })
+      navigate({ to: '/', replace: true })
     },
   })
 

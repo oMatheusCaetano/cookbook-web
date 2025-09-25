@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SairRouteImport } from './routes/sair'
 import { Route as AuthenticatedOnlyRouteRouteImport } from './routes/_authenticated-only/route'
 import { Route as AuthenticatedOnlyIndexRouteImport } from './routes/_authenticated-only/index'
 import { Route as Public_onlyEntrarIndexRouteImport } from './routes/_public_only/entrar/index'
 import { Route as AuthenticatedOnlyReceitaIdIndexRouteImport } from './routes/_authenticated-only/receita/$id/index'
 import { Route as AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRouteImport } from './routes/_authenticated-only/receita/cadastro/{-$id}/index'
 
+const SairRoute = SairRouteImport.update({
+  id: '/sair',
+  path: '/sair',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedOnlyRouteRoute = AuthenticatedOnlyRouteRouteImport.update({
   id: '/_authenticated-only',
   getParentRoute: () => rootRouteImport,
@@ -43,12 +49,14 @@ const AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/sair': typeof SairRoute
   '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
   '/receita/$id': typeof AuthenticatedOnlyReceitaIdIndexRoute
   '/receita/cadastro/{-$id}': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
 export interface FileRoutesByTo {
+  '/sair': typeof SairRoute
   '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
   '/receita/$id': typeof AuthenticatedOnlyReceitaIdIndexRoute
@@ -57,6 +65,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated-only': typeof AuthenticatedOnlyRouteRouteWithChildren
+  '/sair': typeof SairRoute
   '/_authenticated-only/': typeof AuthenticatedOnlyIndexRoute
   '/_public_only/entrar/': typeof Public_onlyEntrarIndexRoute
   '/_authenticated-only/receita/$id/': typeof AuthenticatedOnlyReceitaIdIndexRoute
@@ -64,12 +73,18 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/entrar' | '/receita/$id' | '/receita/cadastro/{-$id}'
+  fullPaths:
+    | '/sair'
+    | '/'
+    | '/entrar'
+    | '/receita/$id'
+    | '/receita/cadastro/{-$id}'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/entrar' | '/receita/$id' | '/receita/cadastro/{-$id}'
+  to: '/sair' | '/' | '/entrar' | '/receita/$id' | '/receita/cadastro/{-$id}'
   id:
     | '__root__'
     | '/_authenticated-only'
+    | '/sair'
     | '/_authenticated-only/'
     | '/_public_only/entrar/'
     | '/_authenticated-only/receita/$id/'
@@ -78,11 +93,19 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedOnlyRouteRoute: typeof AuthenticatedOnlyRouteRouteWithChildren
+  SairRoute: typeof SairRoute
   Public_onlyEntrarIndexRoute: typeof Public_onlyEntrarIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sair': {
+      id: '/sair'
+      path: '/sair'
+      fullPath: '/sair'
+      preLoaderRoute: typeof SairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated-only': {
       id: '/_authenticated-only'
       path: ''
@@ -142,6 +165,7 @@ const AuthenticatedOnlyRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedOnlyRouteRoute: AuthenticatedOnlyRouteRouteWithChildren,
+  SairRoute: SairRoute,
   Public_onlyEntrarIndexRoute: Public_onlyEntrarIndexRoute,
 }
 export const routeTree = rootRouteImport

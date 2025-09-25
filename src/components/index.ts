@@ -12,6 +12,7 @@ export * from './container/form';
 //! Img
 export * from './img/avatar';
 export * from './img/logo';
+export * from './img/spinner';
 
 //! Input
 export * from './input/input';

@@ -1,21 +1,20 @@
 import { Spinner, Title } from '@/components'
 import { logout } from '@/data/auth';
 import { Storage } from '@/lib';
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
 export const Route = createFileRoute('/sair')({
   component: RouteComponent,
+  head: () => ({ meta: [{ title: 'Saindo... | Cookbook' }] }),
 })
 
 function RouteComponent() {
-  const navigate = useNavigate()
-
   useEffect(() => {
     logout()
     Storage.removeAuthData()
     setTimeout(() => {
-      navigate({ to: '/entrar', replace: true })
+      window.location.replace('/entrar')
     }, 1000)
   }, []);
 

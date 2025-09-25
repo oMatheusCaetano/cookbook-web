@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SairRouteImport } from './routes/sair'
 import { Route as AuthenticatedOnlyRouteRouteImport } from './routes/_authenticated-only/route'
 import { Route as AuthenticatedOnlyIndexRouteImport } from './routes/_authenticated-only/index'
+import { Route as Public_onlyRegistrarIndexRouteImport } from './routes/_public_only/registrar/index'
 import { Route as Public_onlyEntrarIndexRouteImport } from './routes/_public_only/entrar/index'
 import { Route as AuthenticatedOnlyReceitaIdIndexRouteImport } from './routes/_authenticated-only/receita/$id/index'
 import { Route as AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRouteImport } from './routes/_authenticated-only/receita/cadastro/{-$id}/index'
@@ -30,6 +31,12 @@ const AuthenticatedOnlyIndexRoute = AuthenticatedOnlyIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedOnlyRouteRoute,
 } as any)
+const Public_onlyRegistrarIndexRoute =
+  Public_onlyRegistrarIndexRouteImport.update({
+    id: '/_public_only/registrar/',
+    path: '/registrar/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const Public_onlyEntrarIndexRoute = Public_onlyEntrarIndexRouteImport.update({
   id: '/_public_only/entrar/',
   path: '/entrar/',
@@ -52,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/sair': typeof SairRoute
   '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
+  '/registrar': typeof Public_onlyRegistrarIndexRoute
   '/receita/$id': typeof AuthenticatedOnlyReceitaIdIndexRoute
   '/receita/cadastro/{-$id}': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
@@ -59,6 +67,7 @@ export interface FileRoutesByTo {
   '/sair': typeof SairRoute
   '/': typeof AuthenticatedOnlyIndexRoute
   '/entrar': typeof Public_onlyEntrarIndexRoute
+  '/registrar': typeof Public_onlyRegistrarIndexRoute
   '/receita/$id': typeof AuthenticatedOnlyReceitaIdIndexRoute
   '/receita/cadastro/{-$id}': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
@@ -68,6 +77,7 @@ export interface FileRoutesById {
   '/sair': typeof SairRoute
   '/_authenticated-only/': typeof AuthenticatedOnlyIndexRoute
   '/_public_only/entrar/': typeof Public_onlyEntrarIndexRoute
+  '/_public_only/registrar/': typeof Public_onlyRegistrarIndexRoute
   '/_authenticated-only/receita/$id/': typeof AuthenticatedOnlyReceitaIdIndexRoute
   '/_authenticated-only/receita/cadastro/{-$id}/': typeof AuthenticatedOnlyReceitaCadastroChar123IdChar125IndexRoute
 }
@@ -77,16 +87,24 @@ export interface FileRouteTypes {
     | '/sair'
     | '/'
     | '/entrar'
+    | '/registrar'
     | '/receita/$id'
     | '/receita/cadastro/{-$id}'
   fileRoutesByTo: FileRoutesByTo
-  to: '/sair' | '/' | '/entrar' | '/receita/$id' | '/receita/cadastro/{-$id}'
+  to:
+    | '/sair'
+    | '/'
+    | '/entrar'
+    | '/registrar'
+    | '/receita/$id'
+    | '/receita/cadastro/{-$id}'
   id:
     | '__root__'
     | '/_authenticated-only'
     | '/sair'
     | '/_authenticated-only/'
     | '/_public_only/entrar/'
+    | '/_public_only/registrar/'
     | '/_authenticated-only/receita/$id/'
     | '/_authenticated-only/receita/cadastro/{-$id}/'
   fileRoutesById: FileRoutesById
@@ -95,6 +113,7 @@ export interface RootRouteChildren {
   AuthenticatedOnlyRouteRoute: typeof AuthenticatedOnlyRouteRouteWithChildren
   SairRoute: typeof SairRoute
   Public_onlyEntrarIndexRoute: typeof Public_onlyEntrarIndexRoute
+  Public_onlyRegistrarIndexRoute: typeof Public_onlyRegistrarIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -119,6 +138,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedOnlyIndexRouteImport
       parentRoute: typeof AuthenticatedOnlyRouteRoute
+    }
+    '/_public_only/registrar/': {
+      id: '/_public_only/registrar/'
+      path: '/registrar'
+      fullPath: '/registrar'
+      preLoaderRoute: typeof Public_onlyRegistrarIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_public_only/entrar/': {
       id: '/_public_only/entrar/'
@@ -167,6 +193,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedOnlyRouteRoute: AuthenticatedOnlyRouteRouteWithChildren,
   SairRoute: SairRoute,
   Public_onlyEntrarIndexRoute: Public_onlyEntrarIndexRoute,
+  Public_onlyRegistrarIndexRoute: Public_onlyRegistrarIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

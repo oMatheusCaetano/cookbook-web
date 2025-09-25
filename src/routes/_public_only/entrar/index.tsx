@@ -1,8 +1,8 @@
-import { AlertBanner, Button, Input, Logo } from '@/components'
+import { AlertBanner, Button, Input, Logo, Title } from '@/components'
 import { login, type LoginData } from '@/data/auth'
 import { useForm } from '@/hooks'
 import { Storage } from '@/lib'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_public_only/entrar/')({
   component: RouteComponent,
@@ -10,13 +10,12 @@ export const Route = createFileRoute('/_public_only/entrar/')({
 })
 
 function RouteComponent() {
-  const navigate = useNavigate()
   const { register, onSubmit, isLoading, error, setErrorsFromApi } = useForm<LoginData>({
     onSubmit: async (data) =>{
       const response = await login(data)
       if (setErrorsFromApi(response)) return
       Storage.setAuthData(response.data)
-      navigate({ to: '/', replace: true })
+      window.location.replace('/')
     },
   })
 
@@ -26,10 +25,9 @@ function RouteComponent() {
         <Logo className='h-11' />
 
         <header className='text-center space-y-2 mb-10 mt-7 '>
-          <h2 className='text-xl font-semibold'>Bem-vindo de volta!</h2>
-          <p className='text-sm text-muted'>
-            Por favor, insira suas credenciais para continuar.
-          </p>
+          <Title sub='Por favor, insira suas credenciais para continuar.'>
+            Bem-vindo de volta!
+          </Title>
         </header>
 
         <form className='space-y-4' onSubmit={onSubmit}>
@@ -47,7 +45,7 @@ function RouteComponent() {
           </Button>
         </form>
 
-        <p className='text-sm text-center mt-4'>
+        <p className='text-sm text-center mt-10'>
           Não tem uma conta? <Link to='/registrar' className='font-semibold'>Registre-se</Link>
         </p>
       </main>

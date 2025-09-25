@@ -1,4 +1,4 @@
-import { post } from './gateway/api'
+import { del, post } from './gateway/api'
 import type { User } from './user'
 
 export type LoginData = {
@@ -13,4 +13,8 @@ export type LoginResponse = {
 
 export async function login(data: LoginData) {
   return post<LoginResponse>('auth/login', data)
+}
+
+export async function logout() {
+  return del<void>('auth/logout')
 }

@@ -2,7 +2,7 @@ import { Avatar, Logo } from '@/components'
 import { getUser } from '@/data/user'
 import { useApp } from '@/hooks'
 import { Storage } from '@/lib'
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated-only')({
   component: RouteComponent,
@@ -24,7 +24,7 @@ export const Route = createFileRoute('/_authenticated-only')({
       const response = await getUser(userData.user.id)
 
       if (response.isError) {
-        throw redirect({ to: '/entrar', search: { redirectTo: props.location.href } })
+        throw redirect({ to: '/entrar' })
       }
 
       props.context.app.setUser(response.data)
@@ -38,12 +38,16 @@ function RouteComponent() {
     <header className='bg-surface p-5 border-b border-border'>
       <header className='flex items-center justify-between gap-2'>
         <section className='flex items-center'>
-          {/* <div className='border-r border-border pr-3 mr-3'> */}
-            <Logo className='h-7' />
-          {/* </div> */}
+          <Logo className='h-7' />
+          <h1 className='ml-3'>
+            Cookbook
+          </h1>
         </section>
 
-        <section>
+        <section className='flex items-center gap-4'>
+          <Link to='/sair' className='inline-flex items-center gap-1 text-sm hover:underline'>
+            Sair
+          </Link>
           <Avatar personName={user.name} />
         </section>
       </header>

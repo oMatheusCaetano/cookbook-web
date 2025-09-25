@@ -25,6 +25,9 @@ export const Storage = {
     return value;
   },
 
+  removeAuthData: () => {
+    Storage.remove(Storage.AUTH_DATA_TOKEN);
+  },
 
   getAuthData: () => {
     return Storage.get(Storage.AUTH_DATA_TOKEN) as { token: string; user: { id: number } } | null;

@@ -1,11 +1,11 @@
-import { AlertBanner, Button, Input, Logo } from '@/components'
+import { AlertBanner, Button, Input, Logo, Title } from '@/components'
 import { createUser, type CreateUserData } from '@/data/user'
 import { useForm } from '@/hooks'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_public_only/registrar/')({
   component: RouteComponent,
-  head: () => ({ meta: [{ title: 'Entrar | Cookbook' }] }),
+  head: () => ({ meta: [{ title: 'Registrar | Cookbook' }] }),
 })
 
 function RouteComponent() {
@@ -24,10 +24,9 @@ function RouteComponent() {
         <Logo className='h-11' />
 
         <header className='text-center space-y-2 mb-10 mt-7 '>
-          <h2 className='text-xl font-semibold'>Criar conta</h2>
-          <p className='text-sm text-muted'>
-            Informe os dados para criar sua conta e começar a usar o Cookbook.
-          </p>
+          <Title sub='Informe os dados para criar sua conta e começar a usar o Cookbook.'>
+            Criar conta
+          </Title>
         </header>
 
         <form className='space-y-4' onSubmit={onSubmit}>
@@ -47,7 +46,7 @@ function RouteComponent() {
           </Button>
         </form>
 
-        <p className='text-sm text-center mt-4'>
+        <p className='text-sm text-center mt-10'>
           Já possui uma conta? <Link to='/entrar' className='font-semibold'>Entrar</Link>
         </p>
       </main>

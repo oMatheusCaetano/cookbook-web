@@ -11,6 +11,11 @@ import { useApp } from './hooks/use-app.tsx'
 import { AppProvider } from './contexts/app-context.tsx'
 import { Toaster } from './components/toast/toaster.tsx'
 
+// Set up dayjs locale to pt-br
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+dayjs.locale('pt-br')
+
 // Create a new router instance
 const router = createRouter({
   routeTree,

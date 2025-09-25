@@ -67,32 +67,33 @@ function RouteComponent() {
       <ul>
         {recipes.map((recipe, i) => (
           <li key={i} className='p-4 border border-border rounded mb-5'>
-            <div className='flex justify-between items-center mb-2'>
-              <h2 className='font-bold text-lg'>{recipe.name}</h2>
-              {recipe.user?.id === app.user?.id && (
-                <Link to='/receita/cadastro/{-$id}' params={{ id: String(recipe.id) }}>
-                  <Button variant='text'>
-                    <LuPencil />
-                  </Button>
+              <div className='flex justify-between items-center mb-2'>
+                <Link to='/receita/$id' params={{ id: String(recipe.id) }}>
+                  <h2 className='font-bold text-lg hover:underline'>{recipe.name}</h2>
                 </Link>
+                {recipe.user?.id === app.user?.id && (
+                  <Link to='/receita/cadastro/{-$id}' params={{ id: String(recipe.id) }}>
+                    <Button variant='text'>
+                      <LuPencil />
+                    </Button>
+                  </Link>
+                )}
+              </div>
+              <p className='text-sm text-foreground/70'>{recipe.description}</p>
+              <div className='flex gap-4 mt-4'>
+                <div className='flex items-center gap-2'>
+                  <LuClock className='text-foreground/70' /> <span className='text-sm text-foreground/70'>{recipe.prep_time}</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <BsPeople className='text-foreground/70' /> <span className='text-sm text-foreground/70'>{recipe.servings}</span>
+                </div>
+              </div>
+              {recipe.user && (
+                <div className='mt-4 flex items-center gap-2 text-sm text-foreground/70'>
+                  <Avatar personName={recipe.user.name} className='h-6 w-6' />
+                  <span>{recipe.user.name}</span>
+                </div>
               )}
-            </div>
-            <p className='text-sm text-foreground/70'>{recipe.description}</p>
-            <div className='flex gap-4 mt-4'>
-              <div className='flex items-center gap-2'>
-                <LuClock className='text-foreground/70' /> <span className='text-sm text-foreground/70'>{recipe.prep_time}</span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <BsPeople className='text-foreground/70' /> <span className='text-sm text-foreground/70'>{recipe.servings}</span>
-              </div>
-            </div>
-            {recipe.user && (
-              <div className='mt-4 flex items-center gap-2 text-sm text-foreground/70'>
-                <Avatar personName={recipe.user.name} className='h-6 w-6' />
-                <span>{recipe.user.name}</span>
-              </div>
-            )}
-
           </li>
         ))}
       </ul>

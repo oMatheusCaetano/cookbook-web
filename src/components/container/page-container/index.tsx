@@ -14,7 +14,7 @@ export function PageContainer({ children, title, sub, ...props }: PageContainerP
     <div {...props} className={cn(props.className, 'p-5 py-10 md:max-w-4xl space-y-10 mx-auto')}>
       <header className="flex items-center justify-between">
         {(!!title || !!sub) && <Title sub={sub}>{title}</Title>}
-        {props.actions && <div className="mt-5">{props.actions}</div>}
+        {props.actions && <div className="flex items-center justify-center gap-4">{props.actions}</div>}
       </header>
 
       <main>

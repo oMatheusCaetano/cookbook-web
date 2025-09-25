@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 
 export const Route = createFileRoute('/_authenticated-only/receita/cadastro/{-$id}/')({
   component: RouteComponent,
+  head: () => ({ meta: [{ title: 'Cadastro de Receita | Cookbook' }] }),
   loader: async (params) => {
     if (!params.params.id) return null
 
@@ -24,9 +25,10 @@ export const Route = createFileRoute('/_authenticated-only/receita/cadastro/{-$i
 
 function RouteComponent() {
   const navigate = useNavigate()
+  const recipe = Route.useLoaderData()
 
   const { register, form, setForm, onSubmit, setErrorsFromApi, isLoading } = useForm<Recipe>({
-    initialData: Route.useLoaderData() ?? {
+    initialData: recipe?.id ? recipe : {
       ingredients: [{ description: '' }],
       steps: [{ description: '' }],
     },
@@ -115,7 +117,7 @@ function RouteComponent() {
           <section className='md:col-span-4'>
             <Title>Ingredientes</Title>
 
-            <ul className='space-y-4 mb-2'>
+            <ul className='space-y-4 mb-2 mt-5'>
               {form.ingredients?.map((_, i) => (
                 <li key={i}>
                   <Input
@@ -134,7 +136,7 @@ function RouteComponent() {
           <section className='md:col-span-8'>
             <Title>Passo a Passo</Title>
 
-            <ul className='space-y-4 mb-2'>
+            <ul className='space-y-4 mb-2 mt-5'>
               {form.steps?.map((_, i) => (
                 <li key={i}>
                   <Textarea
